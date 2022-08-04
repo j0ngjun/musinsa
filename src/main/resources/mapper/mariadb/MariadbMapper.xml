@@ -1,34 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.musinsa.MariadbMapper">
-	<select id="selectFileInfo" parameterType="map" resultType="CamelMap">
-	/* com.musinsa.MariadbMapper.selectFileInfo */
-	
+	<select id="selectLowestPriceList" resultType="CamelMap">
 	SELECT
-		file_name,
-		file_size
+	    brand,
+	  	category,
+		price
 	FROM
-		onto_file_info
+		(SELECT
+			brand,
+			category,
+			price,
+			ROW_NUMBER() OVER (PARTITION BY category ORDER BY price) AS rn
+		FROM
+			product_info) t
 	WHERE
-		ac_cd = #{acCd}
-	AND	file_uuid = #{fileUuid}
+		t.rn = 1
 	</select>
-			
-	<insert id="insertFileInfo" parameterType="map">
-	/* com.musinsa.MariadbMapper.insertFileInfo */
-			
-	INSERT INTO onto_file_info(
-		file_uuid,
-		ac_cd,
-		file_name,
-		file_size,
-		upload_date
-	)VALUES(
-		#{fileUuid},
-		#{acCd},
-		#{fileName},
-		#{fileSize},
-		NOW()
-	)
-	</insert>
+
+	<select id="selectLowestBrand" resultType="CamelMap">
+		SELECT
+		    *
+		FROM
+			(SELECT
+				brand,
+				sum(price) AS total
+			FROM
+				product_info
+			GROUP BY brand) t
+		ORDER BY total
+		LIMIT 1
+	</select>
+
+	<select id="selectCategoryHighestLowestPrice" parameterType="Map" resultType="CamelMap">
+		SELECT
+		    brand,
+		    price
+		FROM
+		    product_info
+		WHERE
+		    category = #{category}
+		ORDER BY price
+		<if test="highest">
+			DESC
+		</if>
+		LIMIT 1
+	</select>
 </mapper>
