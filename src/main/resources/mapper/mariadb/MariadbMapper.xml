@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.musinsa.MariadbMapper">
+	<select id="selectFileInfo" parameterType="map" resultType="CamelMap">
+	/* com.musinsa.MariadbMapper.selectFileInfo */
+	
+	SELECT
+		file_name,
+		file_size
+	FROM
+		onto_file_info
+	WHERE
+		ac_cd = #{acCd}
+	AND	file_uuid = #{fileUuid}
+	</select>
+			
+	<insert id="insertFileInfo" parameterType="map">
+	/* com.musinsa.MariadbMapper.insertFileInfo */
+			
+	INSERT INTO onto_file_info(
+		file_uuid,
+		ac_cd,
+		file_name,
+		file_size,
+		upload_date
+	)VALUES(
+		#{fileUuid},
+		#{acCd},
+		#{fileName},
+		#{fileSize},
+		NOW()
+	)
+	</insert>
+</mapper>
