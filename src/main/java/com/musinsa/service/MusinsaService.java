@@ -62,4 +62,44 @@ public class MusinsaService {
         return retMap;
     }
 
+    public Map<String, Object> allProductList() {
+        Map<String, Object> retMap = new HashMap<>();
+
+        // 모든 상품 정보 List DB Select
+        List<Map<String, Object>> allProductList = sqlSessionTemplate.selectList(NAME_SPACE.concat("selectAllProductList"));
+        retMap.put("allProductList", allProductList);
+
+        return retMap;
+    }
+
+    public Map<String, Object> insertProduct(Map<String, Object> param) throws Exception {
+        Map<String, Object> retMap = new HashMap<>();
+
+        // 브랜드 상품 가격 추가 DB Insert
+        int result = sqlSessionTemplate.insert(NAME_SPACE.concat("insertProduct"), param);
+        if(result <= 0) {
+            throw new Exception("상품 등록 중 오류가 발생하였습니다.");
+        }else {
+            retMap.put("productKey", param.get("productKey"));
+        }
+
+        return retMap;
+    }
+
+    public void updateProduct(Map<String, Object> param) throws Exception {
+        // 브랜드 상품 가격 업데이트 DB Insert
+        int result = sqlSessionTemplate.update(NAME_SPACE.concat("updateProduct"), param);
+        if(result <= 0) {
+            throw new Exception("상품 업데이트 중 오류가 발생하였습니다.");
+        }
+    }
+
+    public void deleteProduct(Map<String, Object> param) throws Exception {
+        // 브랜드 상품 가격 삭제 DB Insert
+        int result = sqlSessionTemplate.delete(NAME_SPACE.concat("deleteProduct"), param);
+        if(result <= 0) {
+            throw new Exception("상품 삭제 중 오류가 발생하였습니다.");
+        }
+    }
+
 }

@@ -2,20 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.musinsa.MariadbMapper">
 	<select id="selectLowestPriceList" resultType="CamelMap">
-	SELECT
-	    brand,
-	  	category,
-		price
-	FROM
-		(SELECT
+		SELECT
 			brand,
 			category,
-			price,
-			ROW_NUMBER() OVER (PARTITION BY category ORDER BY price) AS rn
+			price
 		FROM
-			product_info) t
-	WHERE
-		t.rn = 1
+			(SELECT
+				brand,
+				category,
+				price,
+				ROW_NUMBER() OVER (PARTITION BY category ORDER BY price) AS rn
+			FROM
+				product_info) t
+		WHERE
+			t.rn = 1
 	</select>
 
 	<select id="selectLowestBrand" resultType="CamelMap">
@@ -46,4 +46,49 @@
 		</if>
 		LIMIT 1
 	</select>
+
+	<select id="selectAllProductList" resultType="CamelMap">
+		SELECT
+		    product_key,
+			brand,
+			category,
+			price
+		FROM
+			product_info
+	</select>
+
+	<insert id="insertProduct" parameterType="Map">
+		INSERT INTO product_info (
+			brand,
+			category,
+			price
+		)VALUES (
+			#{brand},
+			#{category},
+			#{price}
+		)
+		<selectKey keyProperty="productKey" resultType="CamelMap" order="AFTER">
+			SELECT LAST_INSERT_ID() as product_key
+		</selectKey>
+	</insert>
+
+	<update id="updateProduct" parameterType="Map">
+		UPDATE product_info
+		SET product_key = #{productKey}
+		<if test='brand != null and brand != "" '>
+			, brand = #{brand}
+		</if>
+		<if test='category != null and category != "" '>
+			, category = #{category}
+		</if>
+		<if test='price != null and price != "" '>
+			, price = #{price}
+		</if>
+		WHERE product_key = #{productKey}
+	</update>
+
+	<delete id="deleteProduct" parameterType="Map">
+		DELETE FROM product_info
+		WHERE product_key = #{productKey}
+	</delete>
 </mapper>
