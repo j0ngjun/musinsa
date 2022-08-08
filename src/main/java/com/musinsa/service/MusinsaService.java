@@ -62,12 +62,12 @@ public class MusinsaService {
         return retMap;
     }
 
-    public Map<String, Object> allProductList() {
+    public Map<String, Object> allList() {
         Map<String, Object> retMap = new HashMap<>();
 
         // 모든 상품 정보 List DB Select
-        List<Map<String, Object>> allProductList = sqlSessionTemplate.selectList(NAME_SPACE.concat("selectAllProductList"));
-        retMap.put("allProductList", allProductList);
+        List<Map<String, Object>> allList = sqlSessionTemplate.selectList(NAME_SPACE.concat("selectAllList"));
+        retMap.put("allList", allList);
 
         return retMap;
     }

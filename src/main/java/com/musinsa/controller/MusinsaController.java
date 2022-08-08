@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController("musinsaController")
-@RequestMapping(value="/api")
+@RequestMapping(value="/product")
 public class MusinsaController {
     private final MusinsaService musinsaService;
 
@@ -69,6 +69,7 @@ public class MusinsaController {
         int resultCode;
         String resultMsg;
 
+        // 필수 값 체크
         if(param.get("category") == null || param.get("category").equals("")) {
             resultCode = HttpStatus.BAD_REQUEST.value();
             resultMsg = "Fail : 카테고리 값은 필수입니다.";
@@ -98,15 +99,15 @@ public class MusinsaController {
         return retMap;
     }
 
-    @RequestMapping(value = "/allProductList", method = RequestMethod.GET)
-    public Map<String, Object> allProductList() {
+    @RequestMapping(value = "/allList", method = RequestMethod.GET)
+    public Map<String, Object> allList() {
         Map<String, Object> retMap = new HashMap<>();
         Map<String, Object> resultData = new HashMap<>();
         int resultCode;
         String resultMsg;
 
         try {
-            resultData = this.musinsaService.allProductList();
+            resultData = this.musinsaService.allList();
             resultCode = HttpStatus.OK.value();
             resultMsg = "Success";
         }catch (Exception e) {
@@ -121,7 +122,7 @@ public class MusinsaController {
         return retMap;
     }
 
-    @RequestMapping(value = "/insertProduct", method = RequestMethod.POST)
+    @RequestMapping(value = "/insert", method = RequestMethod.POST)
     public Map<String, Object> insertProduct(@RequestBody Map<String, Object> param) {
         Map<String, Object> retMap = new HashMap<>();
         Map<String, Object> resultData = new HashMap<>();
@@ -129,6 +130,7 @@ public class MusinsaController {
         String resultMsg = "";
         boolean retFlag = true;
 
+        // 필수 값 체크
         if(param.get("brand") == null || param.get("brand").equals("")) {
             resultMsg = "Fail : 브랜드 값은 필수입니다.";
         }else if(param.get("category") == null || param.get("category").equals("")) {
@@ -161,19 +163,17 @@ public class MusinsaController {
         return retMap;
     }
 
-    @RequestMapping(value = "/updateProduct", method = RequestMethod.PUT)
-    public Map<String, Object> updateProduct(@RequestBody Map<String, Object> param) {
+    @RequestMapping(value = "/{productKey}", method = RequestMethod.PUT)
+    public Map<String, Object> updateProduct(@PathVariable int productKey, @RequestBody Map<String, Object> param) {
         Map<String, Object> retMap = new HashMap<>();
         int resultCode;
         String resultMsg;
 
-        if(param.get("productKey") == null || param.get("productKey").equals("")) {
-            resultMsg = "Fail : 상품키 값은 필수입니다.";
-            resultCode = HttpStatus.BAD_REQUEST.value();
-            retMap.put("resultCode", resultCode);
-            retMap.put("resultMsg", resultMsg);
-            return retMap;
-        }else if((param.get("brand") == null || param.get("brand").equals("")) &&
+        // 상품 키 세팅
+        param.put("productKey", productKey);
+
+        // 필수 값 체크
+        if((param.get("brand") == null || param.get("brand").equals("")) &&
                 (param.get("category") == null || param.get("category").equals("")) &&
                 (param.get("price") == null || param.get("price").equals(""))) {
             resultMsg = "Fail : 업데이트 항목 값은 필수입니다.";
@@ -198,19 +198,14 @@ public class MusinsaController {
         return retMap;
     }
 
-    @RequestMapping(value = "/deleteProduct", method = RequestMethod.DELETE)
-    public Map<String, Object> deleteProduct(@RequestBody Map<String, Object> param) {
+    @RequestMapping(value = "/{productKey}", method = RequestMethod.DELETE)
+    public Map<String, Object> deleteProduct(@PathVariable int productKey, @RequestBody Map<String, Object> param) {
         Map<String, Object> retMap = new HashMap<>();
         int resultCode;
         String resultMsg;
 
-        if(param.get("productKey") == null || param.get("productKey").equals("")) {
-            resultMsg = "Fail : 상품키 값은 필수입니다.";
-            resultCode = HttpStatus.BAD_REQUEST.value();
-            retMap.put("resultCode", resultCode);
-            retMap.put("resultMsg", resultMsg);
-            return retMap;
-        }
+        // 상품 키 세팅
+        param.put("productKey", productKey);
 
         try {
             this.musinsaService.deleteProduct(param);

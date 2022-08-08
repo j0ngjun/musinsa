@@ -47,7 +47,7 @@
 		LIMIT 1
 	</select>
 
-	<select id="selectAllProductList" resultType="CamelMap">
+	<select id="selectAllList" resultType="CamelMap">
 		SELECT
 		    product_key,
 			brand,
