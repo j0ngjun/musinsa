@@ -1,6 +1,7 @@
 # Version
 * JDK 1.8.0_342
 * Spring Boot 2.7.2
+* Gradle 7.5
 * IntelliJ 2022.2
 * MariaDB 10.8.3
 # DB Sample Data Setting
