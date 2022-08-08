@@ -47,7 +47,7 @@ public class MusinsaService {
     public Map<String, Object> categoryHighLow(Map<String, Object> param) {
         Map<String, Object> retMap = new HashMap<>();
 
-        // 카테고리 내 최저가 정보 DB Select
+        // 카테고리 내 최고가, 최저가 정보 DB Select
         Map<String, Object> lowestPrice = sqlSessionTemplate.selectOne(NAME_SPACE.concat("selectCategoryHighestLowestPrice"), param);
         param.put("highest", true);
         Map<String, Object> highestPrice = sqlSessionTemplate.selectOne(NAME_SPACE.concat("selectCategoryHighestLowestPrice"), param);

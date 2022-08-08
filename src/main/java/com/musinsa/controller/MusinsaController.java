@@ -26,7 +26,7 @@ public class MusinsaController {
         try {
             resultData = this.musinsaService.lowestPriceList();
             resultCode = HttpStatus.OK.value();
-            resultMsg = "Success";
+            resultMsg = "Success : 조회 성공";
         }catch (Exception e) {
             resultCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
             resultMsg = "Fail : " + e.getMessage();
@@ -49,7 +49,7 @@ public class MusinsaController {
         try {
             resultData = this.musinsaService.lowestBrand();
             resultCode = HttpStatus.OK.value();
-            resultMsg = "Success";
+            resultMsg = "Success : 조회 성공";
         }catch (Exception e) {
             resultCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
             resultMsg = "Fail : " + e.getMessage();
@@ -85,7 +85,7 @@ public class MusinsaController {
                 resultMsg = "해당하는 카테고리의 가격 정보가 없습니다.";
             }else {
                 resultCode = HttpStatus.OK.value();
-                resultMsg = "Success";
+                resultMsg = "Success : 조회 성공";
             }
         }catch (Exception e) {
             resultCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
@@ -109,7 +109,7 @@ public class MusinsaController {
         try {
             resultData = this.musinsaService.allList();
             resultCode = HttpStatus.OK.value();
-            resultMsg = "Success";
+            resultMsg = "Success : 조회 성공";
         }catch (Exception e) {
             resultCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
             resultMsg = "Fail : " + e.getMessage();
@@ -150,7 +150,7 @@ public class MusinsaController {
         try {
             resultData = this.musinsaService.insertProduct(param);
             resultCode = HttpStatus.OK.value();
-            resultMsg = "Success";
+            resultMsg = "Success : 추가 성공";
         }catch (Exception e) {
             resultCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
             resultMsg = "Fail : " + e.getMessage();
@@ -186,7 +186,7 @@ public class MusinsaController {
         try {
             this.musinsaService.updateProduct(param);
             resultCode = HttpStatus.OK.value();
-            resultMsg = "Success";
+            resultMsg = "Success : 업데이트 성공";
         }catch (Exception e) {
             resultCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
             resultMsg = "Fail : " + e.getMessage();
@@ -199,18 +199,19 @@ public class MusinsaController {
     }
 
     @RequestMapping(value = "/{productKey}", method = RequestMethod.DELETE)
-    public Map<String, Object> deleteProduct(@PathVariable int productKey, @RequestBody Map<String, Object> param) {
+    public Map<String, Object> deleteProduct(@PathVariable int productKey) {
         Map<String, Object> retMap = new HashMap<>();
         int resultCode;
         String resultMsg;
 
         // 상품 키 세팅
+        Map<String, Object> param = new HashMap<>();
         param.put("productKey", productKey);
 
         try {
             this.musinsaService.deleteProduct(param);
             resultCode = HttpStatus.OK.value();
-            resultMsg = "Success";
+            resultMsg = "Success : 삭제 성공";
         }catch (Exception e) {
             resultCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
             resultMsg = "Fail : " + e.getMessage();

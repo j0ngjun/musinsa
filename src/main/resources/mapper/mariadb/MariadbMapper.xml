@@ -24,11 +24,11 @@
 		FROM
 			(SELECT
 				brand,
-				sum(price) AS total
+				sum(price) AS total_price
 			FROM
 				product_info
 			GROUP BY brand) t
-		ORDER BY total
+		ORDER BY total_price
 		LIMIT 1
 	</select>
 
